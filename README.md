@@ -1,4 +1,4 @@
-# smad
+# SMAD
 
 > Single Malt Acadamy Of Dalecarlia
 
