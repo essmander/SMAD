@@ -1,26 +1,15 @@
 const express = require('express');
-const { graphql, buildSchema } = require('graphql');
 const graphqlHTTP = require('express-graphql');
-//const cors = require('cors');
-const schema = require('./schema/schema').default;
-
-// const schema = buildSchema (`
-//     type Query {
-//         language: String
-//     }`
-// )
-
-// const rootValue = {
-//     language: () => 'GraphQL'
-// }
+const schema = require('./schema/schema');
 
 const app = express();
-// app.use(cors());
 
+// bind express with graphql
 app.use('/graphql', graphqlHTTP({
-    // rootValue, schema, graphiql: true
     schema,
     graphiql: true
 }));
 
-app.listen(4000, () =>console.log('Listening on 4000 yolo'));
+app.listen(4000, () => {
+    console.log('now listening for requests on port 4000');
+});
