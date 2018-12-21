@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-mongoose.connect('mongodb://Esset:DelTaco188@ds046027.mlab.com:46027/smad');
+
 mongoose.connection.once('open', () => {
     console.log('connected to database');
 })
