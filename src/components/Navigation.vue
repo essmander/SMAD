@@ -35,7 +35,7 @@
                                  <router-link tag="a" to="/Home" >Hem</router-link>  
                             </li>
                             <li>
-                                <router-link tag="a" to="/Events" >Events <span class="arrow"></span>&#x25BC</router-link>   
+                                <router-link tag="a" to="/Events" >Events <span class="arrow"></span></router-link>   
                                 <ul class="submenu">
                                     <li>
                                          <router-link tag="a" to="/Events/Provningar" >Provningar</router-link>   
