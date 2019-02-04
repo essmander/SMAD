@@ -9,15 +9,28 @@ import App from './App'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import router from './router'
+import ApolloClient from 'apollo-boost'
+import VueApollo from 'vue-apollo'
+
 Vue.config.productionTip = false
 // Vue.use(Vuesax)
 Vue.use(BootstrapVue)
+Vue.use(VueApollo)
 /* eslint-disable no-new */
+const apolloClient = new ApolloClient({
+  uri: 'http://localhost:4000/graphql?'
+})
+
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient,
+})
+
 new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  apolloProvider,
 })
 
 

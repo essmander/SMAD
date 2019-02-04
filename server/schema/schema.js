@@ -36,9 +36,10 @@ const {
 const BoardMemberType = new GraphQLObjectType({
     name: 'BoardMember',
     fields: () =>({
-        id: { type: GraphQLID},
+        memberId: { type: GraphQLID },             
         name: { type: GraphQLString },
-        role: { type: GraphQLString }            
+        role: { type: GraphQLString },
+        pictureURL: { type: GraphQLString }  
     })
 });
 
@@ -52,20 +53,34 @@ const BoardMemberType = new GraphQLObjectType({
 //             type: AuthorType,
 //             resolve(parent, args){
 //                 console.log(parent);
+
 //                 return _.find(authors, { id: parent.authorId });
+
 //             }
+
 //         }
+
 //     })
+
 // });
 
+
 // const AuthorType = new GraphQLObjectType({
+
 //     name: 'Author',
+
 //     fields: ( ) => ({
+
 //         id: { type: GraphQLID },
+
 //         name: { type: GraphQLString },
+
 //         age: { type: GraphQLInt },
+
 //         books: {
+
 //             type: new GraphQLList(BookType),
+
 //             resolve(parent, args){
 //                 return _.filter(books, {authorId: parent.id})
 //             }
@@ -105,15 +120,15 @@ const RootQuery = new GraphQLObjectType({
         // },
         boardMember: {
             type: BoardMemberType,
-            args: { id: { type: GraphQLID } },
+            args: { memberId: { type: GraphQLID } },
             resolve(parent, args){
-                // return _.find(members, {id: args.id});
+                return BoardMember.findById(args.memberId);
             }
         },   
         boardMembers: {
             type: new GraphQLList(BoardMemberType),
             resolve(parent, args){
-                // return members
+                 return BoardMember.find({});
             }
         }   
     }
@@ -144,13 +159,17 @@ const Mutation = new GraphQLObjectType({
         addBoardMember: {
             type: BoardMemberType,
             args: {
+                memberId: {type: GraphQLID },
                 name: {type: GraphQLString },
-                role: {type: GraphQLString }
+                role: {type: GraphQLString },
+                pictureURL: {type: GraphQLString}
             },
             resolve(parent, args){
                 let boardMember = new BoardMember({
+                    memberId: args.memberId,
                     name: args.name,
-                    role: args.role
+                    role: args.role,
+                    pictureURL: args.pictureURL
                 });
 
                 return boardMember.save();
@@ -158,6 +177,8 @@ const Mutation = new GraphQLObjectType({
         }
     }
 })
+
+
 
 module.exports = new GraphQLSchema({
     query: RootQuery,
