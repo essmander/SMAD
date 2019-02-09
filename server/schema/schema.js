@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const _ = require('lodash');
 const BoardMember = require('../models/boardMember');
-
+const Bottling = require('../models/bottling');
 
 const {
     GraphQLObjectType,
@@ -9,7 +9,7 @@ const {
     GraphQLSchema,
     GraphQLID,
     GraphQLInt,
-    GraphQLList
+    GraphQLList,
 } = graphql;
 
 // dummy data
@@ -35,14 +35,29 @@ const {
 
 const BoardMemberType = new GraphQLObjectType({
     name: 'BoardMember',
-    fields: () =>({
-        memberId: { type: GraphQLID },             
+    fields: () => ({
+        memberId: { type: GraphQLID },
         name: { type: GraphQLString },
         role: { type: GraphQLString },
-        pictureURL: { type: GraphQLString }  
+        pictureURL: { type: GraphQLString }
     })
 });
 
+const BottlingType = new GraphQLObjectType({
+    name: 'Bottling',
+    fields: () => ({
+        bottlingId: { type: GraphQLID },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        alcohol: { type: GraphQLString },
+        bottled: { type: GraphQLString },
+        barrelInfo: { type: GraphQLString },
+        bottleSize: { type: GraphQLString },
+        price: { type: GraphQLInt },
+        AmountOfBottles: { type: GraphQLInt },
+        pictureURL: { type: GraphQLString }
+    })
+});
 // const BookType = new GraphQLObjectType({
 //     name: 'Book',
 //     fields: ( ) => ({
@@ -121,16 +136,29 @@ const RootQuery = new GraphQLObjectType({
         boardMember: {
             type: BoardMemberType,
             args: { memberId: { type: GraphQLID } },
-            resolve(parent, args){
+            resolve(parent, args) {
                 return BoardMember.findById(args.memberId);
             }
-        },   
+        },
         boardMembers: {
             type: new GraphQLList(BoardMemberType),
-            resolve(parent, args){
-                 return BoardMember.find({});
+            resolve(parent, args) {
+                return BoardMember.find({});
             }
-        }   
+        },
+        bottling: {
+            type: BottlingType,
+            args: { bottlingId: { type: GraphQLID } },
+            resolve(parent, args) {
+                return Bottling.findById(args.bottlingId);
+            }
+        },
+        bottlings: {
+            type: new GraphQLList(BottlingType),
+            resolve(parent, args) {
+                return Bottling.find({});
+            },
+        }
     }
 });
 // const Mutation = new GraphQLObjectType({
@@ -155,16 +183,16 @@ const RootQuery = new GraphQLObjectType({
 
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
-    fields:{
+    fields: {
         addBoardMember: {
             type: BoardMemberType,
             args: {
-                memberId: {type: GraphQLID },
-                name: {type: GraphQLString },
-                role: {type: GraphQLString },
-                pictureURL: {type: GraphQLString}
+                memberId: { type: GraphQLID },
+                name: { type: GraphQLString },
+                role: { type: GraphQLString },
+                pictureURL: { type: GraphQLString }
             },
-            resolve(parent, args){
+            resolve(parent, args) {
                 let boardMember = new BoardMember({
                     memberId: args.memberId,
                     name: args.name,
@@ -173,6 +201,37 @@ const Mutation = new GraphQLObjectType({
                 });
 
                 return boardMember.save();
+            }
+        },
+        addBottling: {
+            type: BottlingType,
+            args: {
+                bottlingId: { type: GraphQLID },
+                name: { type: GraphQLString },
+                age: { type: GraphQLInt },
+                alcohol: { type: GraphQLString },
+                bottled: { type: GraphQLString },
+                barrelInfo: { type: GraphQLString },
+                bottleSize: { type: GraphQLString },
+                price: { type: GraphQLInt },
+                AmountOfBottles: { type: GraphQLInt },
+                pictureURL: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                let bottling = new Bottling({
+                    bottlingId: args.bottlingId,
+                    name: args.name,
+                    age: args.age,
+                    alcohol: args.alcohol,
+                    bottled: args.bottled,
+                    barrelInfo: args.barrelInfo,
+                    bottleSize: args.bottleSize,
+                    price: args.price,
+                    AmountOfBottles: args.AmountOfBottles,
+                    pictureURL: args.pictureURL
+                });
+
+                return bottling.save();
             }
         }
     }
